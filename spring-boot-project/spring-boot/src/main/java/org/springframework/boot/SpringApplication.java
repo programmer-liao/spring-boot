@@ -258,14 +258,19 @@ public class SpringApplication {
 	 */
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	public SpringApplication(ResourceLoader resourceLoader, Class<?>... primarySources) {
+		// 1.配置source
 		this.resourceLoader = resourceLoader;
 		Assert.notNull(primarySources, "PrimarySources must not be null");
 		this.primarySources = new LinkedHashSet<>(Arrays.asList(primarySources));
+		// 2.配置是否为web环境
 		this.webApplicationType = WebApplicationType.deduceFromClasspath();
+		// 3.创建初始化构造器
 		this.bootstrapRegistryInitializers = new ArrayList<>(
 				getSpringFactoriesInstances(BootstrapRegistryInitializer.class));
 		setInitializers((Collection) getSpringFactoriesInstances(ApplicationContextInitializer.class));
+		// 4.创建应用监听器
 		setListeners((Collection) getSpringFactoriesInstances(ApplicationListener.class));
+		// 5.配置应用的主方法所在类
 		this.mainApplicationClass = deduceMainApplicationClass();
 	}
 
@@ -1285,6 +1290,7 @@ public class SpringApplication {
 	 * @param args the application arguments (usually passed from a Java main method)
 	 * @return the running {@link ApplicationContext}
 	 */
+	// 这就是熟知的SpringBoot启动入口函数
 	public static ConfigurableApplicationContext run(Class<?> primarySource, String... args) {
 		return run(new Class<?>[] { primarySource }, args);
 	}
